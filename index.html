@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Password Security Analyzer</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            padding: 35px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        input[type="password"],
+        input[type="text"] {
+            width: 80%;
+            padding: 12px;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 25px;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Password Security Analyzer</h1>
+
+        <p>Enter a password to analyze its security.</p>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter password"
+        >
+
+        <br>
+
+        <label>
+            <input
+                type="checkbox"
+                id="showPassword"
+                onclick="togglePassword()"
+            >
+            Show Password
+        </label>
+
+        <br>
+
+        <button onclick="analyzePassword()">
+            ANALYZE PASSWORD
+        </button>
+
+        <br>
+
+        <button onclick="clearPassword()">
+            CLEAR
+        </button>
+
+        <p id="result">
+            Enter a password and click Analyze
+        </p>
+
+    </div>
+
+    <script>
+
+        function togglePassword() {
+
+            let passwordInput =
+                document.getElementById("password");
+
+            let showPassword =
+                document.getElementById("showPassword");
+
+            if (showPassword.checked) {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+        }
+
+
+        function clearPassword() {
+
+            document.getElementById("password").value = "";
+
+            document.getElementById("showPassword").checked = false;
+
+            document.getElementById("password").type = "password";
+
+            document.getElementById("result").innerHTML =
+                "Enter a password and click Analyze";
+        }
+
+
+        function analyzePassword() {
+
+            let password =
+                document.getElementById("password").value;
+
+            let score = 0;
+
+            let missing = [];
+
+
+            if (password.length >= 8) {
+                score++;
+            } else {
+                missing.push("8 characters or more");
+            }
+
+
+            if (/[A-Z]/.test(password)) {
+                score++;
+            } else {
+                missing.push("uppercase letter");
+            }
+
+
+            if (/[a-z]/.test(password)) {
+                score++;
+            } else {
+                missing.push("lowercase letter");
+            }
+
+
+            if (/[0-9]/.test(password)) {
+                score++;
+            } else {
+                missing.push("number");
+            }
+
+
+            if (/[^A-Za-z0-9]/.test(password)) {
+                score++;
+            } else {
+                missing.push("special character");
+            }
+
+
+            if (password.length >= 12) {
+                score++;
+            }
+
+
+            let strength;
+
+
+            if (score <= 2) {
+                strength = "WEAK";
+            } else if (score <= 4) {
+                strength = "MEDIUM";
+            } else {
+                strength = "STRONG";
+            }
+
+
+            let resultText =
+                "Password Score: " + score + "/6<br>" +
+                "Strength: " + strength + "<br>";
+
+
+            if (missing.length > 0) {
+
+                resultText +=
+                    "Missing: " +
+                    missing.join(", ");
+
+            } else {
+
+                resultText +=
+                    "All basic requirements met";
+            }
+
+
+            document.getElementById("result").innerHTML =
+                resultText;
+        }
+
+    </script>
+
+</body>
+
+</html>
